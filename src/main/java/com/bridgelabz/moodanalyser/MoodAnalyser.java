@@ -7,13 +7,25 @@ public class MoodAnalyser {
         this.message = message;
     }
 
+
+
     public String analyseMood() throws MoodAnalysisException {
         try {
-            if (this.message.contains("sad"))
+            if (this.message.length() < 1){
+                throw new MoodAnalysisException(MoodAnalysisException.ExceptionType.EMPTY,"Empty message");
+            }
+
+            if (this.message.contains("sad")) {
                 return "SAD";
-            return "HAPPY";
+            }
+
+            if(this.message.contains("happy")) {
+                return "HAPPY";
+            }
+
         }catch (NullPointerException NullPointerException){
-            throw new MoodAnalysisException("Invalid message");
+            throw new MoodAnalysisException(MoodAnalysisException.ExceptionType.NULL,"Invalid message");
         }
+        return null;
     }
 }
