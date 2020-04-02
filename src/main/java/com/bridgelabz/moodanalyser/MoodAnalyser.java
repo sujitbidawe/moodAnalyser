@@ -7,13 +7,13 @@ public class MoodAnalyser {
         this.message = message;
     }
 
-    public String analyseMood() {
+    public String analyseMood() throws MoodAnalysisException {
         try {
             if (this.message.contains("sad"))
                 return "SAD";
             return "HAPPY";
         }catch (NullPointerException NullPointerException){
-            return "HAPPY";
+            throw new MoodAnalysisException("Invalid message");
         }
     }
 }
