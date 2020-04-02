@@ -7,8 +7,6 @@ public class MoodAnalyser {
         this.message = message;
     }
 
-
-
     public String analyseMood() throws MoodAnalysisException {
         try {
             if (this.message.length() < 1){
