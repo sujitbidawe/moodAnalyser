@@ -8,15 +8,15 @@ import java.lang.reflect.InvocationTargetException;
 
 public class MoodAnalyserFactory {
 
-    public static MoodAnalyser getMoodAnalyserObject() {
+    public static MoodAnalyser getMoodAnalyserObject(String className) throws MoodAnalysisException {
         try {
-            Constructor constructor = Class.forName("com.bridgelabz.moodanalyser.MoodAnalyser").getConstructor();
+            Constructor constructor = Class.forName(className ).getConstructor();
             Object refectionObject = constructor.newInstance();
             return (MoodAnalyser) refectionObject;
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            throw new MoodAnalysisException(MoodAnalysisException.ExceptionType.CLASSNOTFOUND, "Invalid class name");
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -27,9 +27,9 @@ public class MoodAnalyserFactory {
         return null;
     }
 
-    public static MoodAnalyser getMoodAnalyserObject(String message) throws MoodAnalysisException {
+    public static MoodAnalyser getMoodAnalyserObject(String className, String message) throws MoodAnalysisException {
         try {
-            Constructor constructor = Class.forName("com.bridgelabz.moodanalyser.MoodAnalyser").getConstructor(String.class);
+            Constructor constructor = Class.forName(className).getConstructor(String.class);
             Object reflectionObject = constructor.newInstance(message);
             return (MoodAnalyser) reflectionObject;
         }catch (NoSuchMethodException e){

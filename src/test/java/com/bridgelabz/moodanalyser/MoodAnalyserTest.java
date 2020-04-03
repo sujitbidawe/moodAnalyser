@@ -45,9 +45,15 @@ public class MoodAnalyserTest {
 
     @Test
     public void givenMoodAnalyser_whenProper_shouldReturnObject() {
-        MoodAnalyser moodAnalyserObject = MoodAnalyserFactory.getMoodAnalyserObject();
-        MoodAnalyser moodAnalyser = new MoodAnalyser();
-        Assert.assertTrue(moodAnalyser.equals(moodAnalyserObject));
+        MoodAnalyser moodAnalyserObject = null;
+        try {
+            moodAnalyserObject = MoodAnalyserFactory.getMoodAnalyserObject("com.bridgelabz.moodanalyser.MoodAnalyser");
+            MoodAnalyser moodAnalyser = new MoodAnalyser();
+            Assert.assertTrue(moodAnalyser.equals(moodAnalyserObject));
+        } catch (MoodAnalysisException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Test
