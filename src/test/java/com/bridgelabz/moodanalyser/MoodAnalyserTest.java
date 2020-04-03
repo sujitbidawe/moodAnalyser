@@ -57,11 +57,8 @@ public class MoodAnalyserTest {
 
     @Test
     public void givenMoodAnalyser_whenImproper_shouldThrowClassNotFoundException() {
-        MoodAnalyser moodAnalyserObject = null;
         try {
-            moodAnalyserObject = MoodAnalyserFactory.getMoodAnalyserObject("com.bridgelabz.moodanalyser.MoodAnalyser");
-            MoodAnalyser moodAnalyser = new MoodAnalyser();
-
+            MoodAnalyserFactory.getMoodAnalyserObject("com.bridgelabz.moodanalyser.MoodAnalyser");
         } catch (MoodAnalysisException e) {
             Assert.assertEquals("Invalid class name", e.getMessage());
         }
@@ -69,7 +66,6 @@ public class MoodAnalyserTest {
 
     @Test
     public void givenMoodAnalyser_whenInvalidConstructor_shouldThrowNoSuchMethodException() {
-
         try {
             MoodAnalyserFactory.getMoodAnalyserObjectForMethodError("com.bridgelabz.moodanalyser.MoodAnalyser", "I am sad today");
         } catch (MoodAnalysisException e) {
