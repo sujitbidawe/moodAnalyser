@@ -1,7 +1,11 @@
 package com.bridgelabz.moodanalyser;
 
+import com.bridgelabz.moodanalyser.factory.MoodAnalyserFactory;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 public class MoodAnalyserTest {
     @Test
@@ -13,7 +17,7 @@ public class MoodAnalyserTest {
 
     @Test
     public void givenHappyMessage_shouldReturnHappyMood() throws MoodAnalysisException {
-        MoodAnalyser moodAnalyser = new MoodAnalyser("i am in any mood");
+        MoodAnalyser moodAnalyser = new MoodAnalyser("i am in happy mood");
         String mood = moodAnalyser.analyseMood();
         Assert.assertEquals("HAPPY", mood);
     }
@@ -24,10 +28,9 @@ public class MoodAnalyserTest {
             MoodAnalyser moodAnalyser = new MoodAnalyser(null);
             String mood = moodAnalyser.analyseMood();
         } catch (MoodAnalysisException moodAnalysisException) {
-            Assert.assertEquals(MoodAnalysisException.ExceptionType.NULL,moodAnalysisException.type);
+            Assert.assertEquals(MoodAnalysisException.ExceptionType.NULL, moodAnalysisException.type);
             Assert.assertEquals("Invalid message", moodAnalysisException.getMessage());
         }
-
     }
 
     @Test
@@ -38,7 +41,65 @@ public class MoodAnalyserTest {
         } catch (MoodAnalysisException moodAnalysisException) {
             Assert.assertEquals(MoodAnalysisException.ExceptionType.EMPTY, moodAnalysisException.type);
         }
+    }
 
+    @Test
+    public void givenMoodAnalyser_whenProper_shouldReturnObject() {
+        MoodAnalyser moodAnalyserObject = MoodAnalyserFactory.getMoodAnalyserObject();
+        MoodAnalyser moodAnalyser = new MoodAnalyser();
+        Assert.assertTrue(moodAnalyser.equals(moodAnalyserObject));
+    }
+
+    @Test
+    public void givenMoodAnalyser_whenImproper_shouldThrowClassNotFoundException() {
+        try {
+            Constructor constructor = Class.forName("com.bridgelabz.MoodAnalyser").getConstructor(String.class);
+            Object reflectionObject = constructor.newInstance("I am in Sad mood");
+            MoodAnalyser moodAnalyser = (MoodAnalyser) reflectionObject;
+            MoodAnalyser realMoodObject = new MoodAnalyser("I am in sad mood");
+            boolean result = realMoodObject.equals(moodAnalyser);
+
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            try {
+                throw new MoodAnalysisException(MoodAnalysisException.ExceptionType.CLASSNOTFOUND, "Invalid class name");
+            } catch (MoodAnalysisException moodAnalyserException) {
+                Assert.assertEquals(MoodAnalysisException.ExceptionType.CLASSNOTFOUND, moodAnalyserException.type);
+            }
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenMoodAnalyser_whenInvalidConstructor_shouldThrowNoSuchMethodException() {
+        try {
+            Constructor constructor = Class.forName("com.bridgelabz.moodanalyser.MoodAnalyser").getConstructor(String.class, Integer.class);
+            Object reflectionObject = constructor.newInstance("I am in Sad mood", 1);
+            MoodAnalyser moodAnalyser = (MoodAnalyser) reflectionObject;
+            MoodAnalyser realMoodObject = new MoodAnalyser("I am in sad mood");
+            boolean result = realMoodObject.equals(moodAnalyser);
+
+        } catch (NoSuchMethodException e) {
+            try {
+                throw new MoodAnalysisException(MoodAnalysisException.ExceptionType.CLASSNOTFOUND, "Invalid constructor");
+            } catch (MoodAnalysisException moodAnalyserException) {
+                Assert.assertEquals("Invalid constructor", moodAnalyserException.getMessage());
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
 }
