@@ -27,13 +27,14 @@ public class MoodAnalyserFactory {
         return null;
     }
 
-    public static MoodAnalyser getMoodAnalyserObject(String className, String message) throws MoodAnalysisException {
+    public static MoodAnalyser getMoodAnalyserObject(String className, String param) throws MoodAnalysisException {
         try {
-            Constructor constructor = Class.forName(className).getConstructor(String.class);
-            Object reflectionObject = constructor.newInstance(message);
+            Constructor constructor = Class.forName(className).getConstructor(String.class, Integer.class);
+            Object reflectionObject = constructor.newInstance(param);
             return (MoodAnalyser) reflectionObject;
+
         }catch (NoSuchMethodException e){
-            e.printStackTrace();
+            throw new MoodAnalysisException(MoodAnalysisException.ExceptionType.INVALIDCONSTRUCTOR, "No such method");
         }catch (ClassNotFoundException e){
             throw new MoodAnalysisException(MoodAnalysisException.ExceptionType.CLASSNOTFOUND, "Invalid class name");
         }catch (InstantiationException e) {
@@ -45,4 +46,25 @@ public class MoodAnalyserFactory {
         }
         return null;
     }
+
+    public static MoodAnalyser getMoodAnalyserObjectForMethodError(String className, String param) throws MoodAnalysisException {
+        try {
+            Constructor constructor = Class.forName(className).getConstructor(String.class, Integer.class);
+            Object reflectionObject = constructor.newInstance(param);
+            return (MoodAnalyser) reflectionObject;
+
+        }catch (NoSuchMethodException e){
+            throw new MoodAnalysisException(MoodAnalysisException.ExceptionType.INVALIDCONSTRUCTOR, "No such method");
+        }catch (ClassNotFoundException e){
+            throw new MoodAnalysisException(MoodAnalysisException.ExceptionType.CLASSNOTFOUND, "Invalid class name");
+        }catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

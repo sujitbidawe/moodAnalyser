@@ -69,29 +69,12 @@ public class MoodAnalyserTest {
 
     @Test
     public void givenMoodAnalyser_whenInvalidConstructor_shouldThrowNoSuchMethodException() {
-        try {
-            Constructor constructor = Class.forName("com.bridgelabz.moodanalyser.MoodAnalyser").getConstructor(String.class, Integer.class);
-            Object reflectionObject = constructor.newInstance("I am in Sad mood", 1);
-            MoodAnalyser moodAnalyser = (MoodAnalyser) reflectionObject;
-            MoodAnalyser realMoodObject = new MoodAnalyser("I am in sad mood");
-            boolean result = realMoodObject.equals(moodAnalyser);
 
-        } catch (NoSuchMethodException e) {
-            try {
-                throw new MoodAnalysisException(MoodAnalysisException.ExceptionType.CLASSNOTFOUND, "Invalid constructor");
-            } catch (MoodAnalysisException moodAnalyserException) {
-                Assert.assertEquals("Invalid constructor", moodAnalyserException.getMessage());
-            }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+        try {
+            MoodAnalyserFactory.getMoodAnalyserObjectForMethodError("com.bridgelabz.moodanalyser.MoodAnalyser", "I am sad today");
+        } catch (MoodAnalysisException e) {
+            Assert.assertTrue(MoodAnalysisException.ExceptionType.INVALIDCONSTRUCTOR.equals(e.type));
         }
     }
-
 }
 
