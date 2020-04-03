@@ -53,32 +53,17 @@ public class MoodAnalyserTest {
         } catch (MoodAnalysisException e) {
             e.printStackTrace();
         }
-
     }
 
     @Test
     public void givenMoodAnalyser_whenImproper_shouldThrowClassNotFoundException() {
+        MoodAnalyser moodAnalyserObject = null;
         try {
-            Constructor constructor = Class.forName("com.bridgelabz.MoodAnalyser").getConstructor(String.class);
-            Object reflectionObject = constructor.newInstance("I am in Sad mood");
-            MoodAnalyser moodAnalyser = (MoodAnalyser) reflectionObject;
-            MoodAnalyser realMoodObject = new MoodAnalyser("I am in sad mood");
-            boolean result = realMoodObject.equals(moodAnalyser);
+            moodAnalyserObject = MoodAnalyserFactory.getMoodAnalyserObject("com.bridgelabz.moodanalyser.MoodAnalyser");
+            MoodAnalyser moodAnalyser = new MoodAnalyser();
 
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            try {
-                throw new MoodAnalysisException(MoodAnalysisException.ExceptionType.CLASSNOTFOUND, "Invalid class name");
-            } catch (MoodAnalysisException moodAnalyserException) {
-                Assert.assertEquals(MoodAnalysisException.ExceptionType.CLASSNOTFOUND, moodAnalyserException.type);
-            }
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+        } catch (MoodAnalysisException e) {
+            Assert.assertEquals("Invalid class name", e.getMessage());
         }
     }
 
