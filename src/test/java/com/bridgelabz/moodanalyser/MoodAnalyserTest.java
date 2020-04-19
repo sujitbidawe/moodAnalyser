@@ -130,5 +130,13 @@ public class MoodAnalyserTest {
         }
     }
 
+    @Test
+    public void givenNullValueToField_shouldThrowException() throws IllegalAccessException, NoSuchFieldException {
+        MoodAnalyser moodAnalyser = new MoodAnalyser("sad");
+        Class<?> cls = moodAnalyser.getClass();
+        Field field = cls.getDeclaredField("message");
+        field.set(moodAnalyser, null);
+    }
+
 }
 
