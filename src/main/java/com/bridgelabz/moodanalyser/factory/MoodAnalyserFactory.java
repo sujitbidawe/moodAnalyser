@@ -10,7 +10,7 @@ public class MoodAnalyserFactory {
 
     public static MoodAnalyser getMoodAnalyserObject() {
         try {
-            Constructor constructor = Class.forName("com.bridgelabz.moodanalyser.MoodAnalyser").getConstructor();
+            Constructor<?> constructor = Class.forName("com.bridgelabz.moodanalyser.MoodAnalyser").getConstructor();
             Object reflectionObject = constructor.newInstance();
             return  (MoodAnalyser) reflectionObject;
         } catch (NoSuchMethodException e) {
