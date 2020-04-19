@@ -6,30 +6,44 @@ import org.junit.Test;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class MoodAnalyserTest {
     @Test
-    public void givenSadMessage_shouldReturnSadMood() throws MoodAnalysisException {
+    public void givenMessage_whenSad_shouldReturnSad() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         MoodAnalyser moodAnalyser = new MoodAnalyser("i am in sad mood");
-        String mood = moodAnalyser.analyseMood();
+        Class<?> cls = moodAnalyser.getClass();
+        Method methodObject = cls.getDeclaredMethod("analyseMood");
+        String mood = (String) methodObject.invoke(moodAnalyser);
         Assert.assertEquals("SAD", mood);
     }
 
     @Test
-    public void givenHappyMessage_shouldReturnHappyMood() throws MoodAnalysisException {
+    public void givenMessage_whenHappy_shouldReturnHappy() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         MoodAnalyser moodAnalyser = new MoodAnalyser("i am in happy mood");
-        String mood = moodAnalyser.analyseMood();
+        Class<?> cls = moodAnalyser.getClass();
+        Method methodObject = cls.getDeclaredMethod("analyseMood");
+        String mood = (String) methodObject.invoke(moodAnalyser);
         Assert.assertEquals("HAPPY", mood);
     }
 
     @Test
-    public void givenNullMessage_whenAnalyseMood_shouldThrowMoodAnalysisException() {
+    public void givenMessage_whenAny_shouldReturnHappy() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        MoodAnalyser moodAnalyser = new MoodAnalyser("I am in any mood");
+        Class<?> cls = moodAnalyser.getClass();
+        Method methodObject = cls.getDeclaredMethod("analyseMood");
+        String mood = (String) methodObject.invoke(moodAnalyser);
+        Assert.assertEquals("HAPPY", mood);
+    }
+
+    @Test
+    public void givenMessage_whenNull_shouldThrowMoodAnalysisException() {
         try {
             MoodAnalyser moodAnalyser = new MoodAnalyser(null);
             String mood = moodAnalyser.analyseMood();
-        } catch (MoodAnalysisException moodAnalysisException) {
-            Assert.assertEquals(MoodAnalysisException.ExceptionType.NULL, moodAnalysisException.type);
+        }catch (MoodAnalysisException moodAnalysisException) {
             Assert.assertEquals("Invalid message", moodAnalysisException.getMessage());
+
         }
     }
 
@@ -39,7 +53,7 @@ public class MoodAnalyserTest {
             MoodAnalyser moodAnalyser = new MoodAnalyser("");
             String mood = moodAnalyser.analyseMood();
         } catch (MoodAnalysisException moodAnalysisException) {
-            Assert.assertEquals(MoodAnalysisException.ExceptionType.EMPTY, moodAnalysisException.type);
+            Assert.assertEquals("Empty message", moodAnalysisException.getMessage());
         }
     }
 
@@ -47,7 +61,7 @@ public class MoodAnalyserTest {
     public void givenMoodAnalyser_whenProper_shouldReturnObject() {
         MoodAnalyser moodAnalyserObject = MoodAnalyserFactory.getMoodAnalyserObject();
         MoodAnalyser moodAnalyser = new MoodAnalyser();
-        Assert.assertTrue(moodAnalyser.equals(moodAnalyserObject));
+        Assert.assertEquals(moodAnalyser, moodAnalyserObject);
     }
 
     @Test
