@@ -45,31 +45,27 @@ public class MoodAnalyserTest {
 
     @Test
     public void givenMoodAnalyser_whenProper_shouldReturnObject() {
-        MoodAnalyser moodAnalyserObject = null;
-        try {
-            moodAnalyserObject = MoodAnalyserFactory.getMoodAnalyserObject("com.bridgelabz.moodanalyser.MoodAnalyser");
-            MoodAnalyser moodAnalyser = new MoodAnalyser();
-            Assert.assertTrue(moodAnalyser.equals(moodAnalyserObject));
-        } catch (MoodAnalysisException e) {
-            e.printStackTrace();
-        }
+        MoodAnalyser moodAnalyserObject = MoodAnalyserFactory.getMoodAnalyserObject();
+        MoodAnalyser moodAnalyser = new MoodAnalyser();
+        Assert.assertTrue(moodAnalyser.equals(moodAnalyserObject));
     }
 
     @Test
     public void givenMoodAnalyser_whenImproper_shouldThrowClassNotFoundException() {
         try {
-            MoodAnalyserFactory.getMoodAnalyserObject("com.bridgelabz.moodanalyser.MoodAnalyser");
+            Constructor<?> moodAnalyserConstructor = MoodAnalyserFactory.getMoodAnalyserObject("CroodAnalyser");
         } catch (MoodAnalysisException e) {
-            Assert.assertEquals("Invalid class name", e.getMessage());
+            Assert.assertEquals(MoodAnalysisException.ExceptionType.CLASSNOTFOUND,e.type);
         }
     }
 
     @Test
     public void givenMoodAnalyser_whenInvalidConstructor_shouldThrowNoSuchMethodException() {
         try {
-            MoodAnalyserFactory.getMoodAnalyserObjectForMethodError("com.bridgelabz.moodanalyser.MoodAnalyser", "I am sad today");
+            Constructor<?> moodAnalyserConstructor = MoodAnalyserFactory.getMoodAnalyserObject("com.bridgelabz." +
+                    "moodanalyser.MoodAnalyser", Integer.class);
         } catch (MoodAnalysisException e) {
-            Assert.assertTrue(MoodAnalysisException.ExceptionType.INVALIDCONSTRUCTOR.equals(e.type));
+            Assert.assertEquals(MoodAnalysisException.ExceptionType.INVALIDCONSTRUCTOR,e.type);
         }
     }
 }

@@ -23,14 +23,13 @@ public class MoodAnalyser {
                 return "SAD";
             }
 
-            if(this.message.contains("happy")) {
+            if(this.message.contains("happy") || this.message.contains("any")) {
                 return "HAPPY";
             }
-
+            return "HAPPY";
         }catch (NullPointerException NullPointerException){
             throw new MoodAnalysisException(MoodAnalysisException.ExceptionType.NULL,"Invalid message");
         }
-        return null;
     }
 
     @Override
