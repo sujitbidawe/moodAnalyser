@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -98,5 +99,18 @@ public class MoodAnalyserTest {
             }
         }
     }
+
+    @Test
+    public void givenFieldName_shouldChangeMoodToHappy() throws NoSuchFieldException,
+            IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        MoodAnalyser moodAnalyser = new MoodAnalyser("sad");
+        Class<?> cls = moodAnalyser.getClass();
+        Field field = cls.getDeclaredField("message");
+        field.set(moodAnalyser, "Happy");
+        Method methodObject = cls.getDeclaredMethod("analyseMood");
+        String mood = (String) methodObject.invoke(moodAnalyser);
+        Assert.assertEquals("HAPPY", mood);
+    }
+
 }
 
